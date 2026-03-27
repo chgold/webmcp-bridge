@@ -1,0 +1,15 @@
+{
+  "name": "webmcp-bridge",
+  "version": "1.0.0",
+  "description": "MCP bridge for WebMCP-compliant servers — use any WebMCP site as Claude Desktop MCP server",
+  "bin": {
+    "webmcp-bridge": "./index.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

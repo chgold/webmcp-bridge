@@ -200,7 +200,7 @@ async function handleListSites() {
       content: [
         {
           type: 'text',
-          text: 'No WebMCP sites configured.\nUse webmcp.addSite to add one.',
+          text: 'No WebMCP sites configured.\nUse webmcp_addSite to add one.',
         },
       ],
     };

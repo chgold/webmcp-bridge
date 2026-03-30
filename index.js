@@ -103,7 +103,7 @@ async function fetchManifest(url) {
 async function loadSiteTools(siteKey, siteConfig) {
   const manifest = await fetchManifest(siteConfig.manifest);
   const toolsEndpoint = manifest.usage?.tools_endpoint;
-  const tools = manifest.usage?.tools || [];
+  const tools = manifest.usage?.tools || manifest.tools || [];
 
   if (!toolsEndpoint) {
     throw new Error('manifest.usage.tools_endpoint not found');
@@ -184,7 +184,7 @@ function getAllTools() {
     siteTools.push({
       name: qualifiedName,
       description: `[${meta.siteKey}] ${meta.toolDef.description || ''}`,
-      inputSchema: meta.toolDef.parameters || { type: 'object', properties: {} },
+      inputSchema: meta.toolDef.input_schema || meta.toolDef.inputSchema || meta.toolDef.parameters || { type: 'object', properties: {} },
     });
   }
   return [...getMetaTools(), ...siteTools];
@@ -386,7 +386,7 @@ async function main() {
 
     const serverName = cliArgs.name || manifest.server?.name || 'WebMCP Server';
     const toolsEndpoint = manifest.usage?.tools_endpoint;
-    const tools = manifest.usage?.tools || [];
+    const tools = manifest.usage?.tools || manifest.tools || [];
     const token = cliArgs.token;
 
     if (!toolsEndpoint) {
@@ -403,7 +403,7 @@ async function main() {
       tools: tools.map((tool) => ({
         name: tool.name,
         description: tool.description || '',
-        inputSchema: tool.parameters || { type: 'object', properties: {} },
+        inputSchema: tool.input_schema || tool.inputSchema || tool.parameters || { type: 'object', properties: {} },
       })),
     }));
 

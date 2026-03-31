@@ -1,6 +1,6 @@
-# webmcp-bridge
+# webmcp-bridge v2.0
 
-Meta MCP Bridge for WebMCP-compliant servers. Configure **once** in Claude Desktop, then add/remove any number of WebMCP sites dynamically — no restart required.
+Meta MCP Bridge for WebMCP-compliant servers. Configure **once** in any MCP client, then add/remove any number of WebMCP sites dynamically. No restart required.
 
 ## Installation
 
@@ -32,6 +32,23 @@ Or if you cloned the repo manually, point to the `index.js` directly:
     "webmcp": {
       "command": "node",
       "args": ["/path/to/webmcp-bridge/index.js"]
+    }
+  }
+}
+```
+
+### Behind NetFree or a Corporate SSL Proxy?
+
+If you're behind NetFree (Israeli content filter) or a corporate SSL proxy, the bridge may fail with `unable to get local issuer certificate`. Fix it by setting `NODE_TLS_REJECT_UNAUTHORIZED`:
+
+```json
+{
+  "mcpServers": {
+    "webmcp": {
+      "command": "webmcp-bridge",
+      "env": {
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+      }
     }
   }
 }
@@ -119,6 +136,32 @@ drush --uri=http://your-site.com php:eval "
 echo \$t['access_token'];
 "
 ```
+
+## MCP Client Compatibility
+
+webmcp-bridge implements the MCP stdio transport and works with **any MCP-compatible client**:
+
+| Client | Platform | Notes |
+|--------|----------|-------|
+| **Claude Desktop** | Desktop app | Full support, recommended |
+| **Cursor** | IDE | Add to MCP settings |
+| **Continue.dev** | VS Code / JetBrains | Add to `~/.continue/config.json` |
+| **Windsurf** | IDE | Add to MCP settings |
+| **Cline** | VS Code extension | Add to MCP settings |
+| **Zed** | Editor | Add to settings.json |
+| **Any MCP stdio client** | Various | Works with any client supporting stdio transport |
+
+### Configuring in Other Clients
+
+The configuration is always the same pattern. Point to the `webmcp-bridge` command:
+
+```json
+{
+  "command": "webmcp-bridge"
+}
+```
+
+Refer to your client's MCP documentation for the exact config file location.
 
 ## Requirements
 

@@ -52,7 +52,10 @@ function httpFetch(url, { method = 'GET', headers = {}, body = null, timeoutMs =
   });
 }
 
-const CONFIG_DIR = join(homedir(), '.webmcp-bridge');
+// Support legacy .webmcp-bridge dir; new installs use .webmcp-client
+const _legacyDir = join(homedir(), '.webmcp-bridge');
+const _newDir = join(homedir(), '.webmcp-client');
+const CONFIG_DIR = existsSync(_legacyDir) && !existsSync(_newDir) ? _legacyDir : _newDir;
 const CONFIG_FILE = join(CONFIG_DIR, 'sites.json');
 
 function sanitizeName(s) {
@@ -461,23 +464,23 @@ async function main() {
     if (parsed.name && parsed.manifest && parsed.token) {
       sitesConfig.sites[parsed.name] = { manifest: parsed.manifest, token: parsed.token };
       saveConfig();
-      console.error(`[webmcp-bridge] Site "${parsed.name}" saved from --site flag.`);
+      console.error(`[webmcp-client] Site "${parsed.name}" saved from --site flag.`);
     } else {
-      console.error('[webmcp-bridge] Warning: --site requires name=...,manifest=...,token=...');
+      console.error('[webmcp-client] Warning: --site requires name=...,manifest=...,token=...');
     }
   }
 
   for (const [siteKey, siteConfig] of Object.entries(sitesConfig.sites)) {
     try {
       const count = await loadSiteTools(siteKey, siteConfig);
-      console.error(`[webmcp-bridge] Loaded ${count} tools from "${siteKey}"`);
+       console.error(`[webmcp-client] Loaded ${count} tools from "${siteKey}"`);
     } catch (e) {
-      console.error(`[webmcp-bridge] Warning: could not load site "${siteKey}": ${e.message}`);
+       console.error(`[webmcp-client] Warning: could not load site "${siteKey}": ${e.message}`);
     }
   }
 
   server = new Server(
-    { name: 'WebMCP Meta Bridge', version: '2.0.0' },
+    { name: 'WebMCP Meta Client', version: '2.0.0' },
     { capabilities: { tools: {} } }
   );
 

@@ -1,14 +1,16 @@
-# webmcp-bridge v2.0
+# webmcp-client v2.0
 
-Meta MCP Bridge for WebMCP-compliant servers. Configure **once** in any MCP client, then add/remove any number of WebMCP sites dynamically. No restart required.
+Meta MCP Client for WebMCP-compliant servers. Configure **once** in any MCP client, then add/remove any number of WebMCP sites dynamically. No restart required.
+
+**Legacy alias:** `webmcp-bridge` still works for backwards compatibility.
 
 ## Installation
 
 ```bash
-npm install -g github:chgold/webmcp-bridge
+npm install -g github:chgold/webmcp-client
 ```
 
-This installs the `webmcp-bridge` command globally from GitHub.
+This installs the `webmcp-client` command globally from GitHub.
 
 ## Claude Desktop Configuration (set once, never change)
 
@@ -18,7 +20,7 @@ After installing globally:
 {
   "mcpServers": {
     "webmcp": {
-      "command": "webmcp-bridge"
+      "command": "webmcp-client"
     }
   }
 }
@@ -31,7 +33,7 @@ Or if you cloned the repo manually, point to the `index.js` directly:
   "mcpServers": {
     "webmcp": {
       "command": "node",
-      "args": ["/path/to/webmcp-bridge/index.js"]
+      "args": ["/path/to/webmcp-client/index.js"]
     }
   }
 }
@@ -45,7 +47,7 @@ If you're behind NetFree (Israeli content filter) or a corporate SSL proxy, the 
 {
   "mcpServers": {
     "webmcp": {
-      "command": "webmcp-bridge",
+      "command": "webmcp-client",
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0"
       }
@@ -56,9 +58,9 @@ If you're behind NetFree (Israeli content filter) or a corporate SSL proxy, the 
 
 ## Usage
 
-### Meta Bridge Mode (default)
+### Meta Client Mode (default)
 
-Start with no arguments — the bridge manages sites via `~/.webmcp-bridge/sites.json`:
+Start with no arguments — the client manages sites via `~/.webmcp-client/sites.json`:
 
 ```bash
 node index.js
@@ -68,9 +70,9 @@ Three meta-tools are always available in Claude Desktop:
 
 | Tool | Description |
 |------|-------------|
-| `webmcp.addSite` | Add a WebMCP site — fetches manifest, loads tools, notifies Claude |
-| `webmcp.listSites` | List configured sites with tool counts |
-| `webmcp.removeSite` | Remove a site and its tools |
+| `webmcp_addSite` | Add a WebMCP site — fetches manifest, loads tools, notifies Claude |
+| `webmcp_listSites` | List configured sites with tool counts |
+| `webmcp_removeSite` | Remove a site and its tools |
 
 Once a site is added, its tools appear as `{site-name}/{tool-name}`, e.g. `drupal-prod/drupal.searchNodes`.
 
@@ -80,11 +82,11 @@ Once a site is added, its tools appear as `{site-name}/{tool-name}`, e.g. `drupa
 node index.js --site name=drupal-prod,manifest=https://site.com/api/ai-connect/v1/manifest,token=Bearer_dpc_xxx
 ```
 
-Saves the site to `~/.webmcp-bridge/sites.json` and loads it immediately.
+Saves the site to `~/.webmcp-client/sites.json` and loads it immediately.
 
 ### Config file
 
-`~/.webmcp-bridge/sites.json` is created automatically on first run:
+Config is stored in `~/.webmcp-client/sites.json` (new installs) or `~/.webmcp-bridge/sites.json` (existing installs — automatically detected). The file is created automatically on first run:
 
 ```json
 {
@@ -120,10 +122,10 @@ Works with any WebMCP-compliant server:
 
 ## How It Works
 
-1. On startup, loads all sites from `~/.webmcp-bridge/sites.json`
+1. On startup, loads all sites from `~/.webmcp-client/sites.json`
 2. Fetches each manifest and populates the tool registry (unreachable sites are skipped gracefully)
 3. Exposes 3 meta-tools + all site tools via MCP stdio
-4. When `webmcp.addSite` or `webmcp.removeSite` is called:
+4. When `webmcp_addSite` or `webmcp_removeSite` is called:
    - Updates the config file
    - Reloads the tool registry
    - Sends `notifications/tools/list_changed` so Claude Desktop refreshes immediately
@@ -139,7 +141,7 @@ echo \$t['access_token'];
 
 ## MCP Client Compatibility
 
-webmcp-bridge implements the MCP stdio transport and works with **any MCP-compatible client**:
+webmcp-client implements the MCP stdio transport and works with **any MCP-compatible client**:
 
 | Client | Platform | Notes |
 |--------|----------|-------|
@@ -153,11 +155,11 @@ webmcp-bridge implements the MCP stdio transport and works with **any MCP-compat
 
 ### Configuring in Other Clients
 
-The configuration is always the same pattern. Point to the `webmcp-bridge` command:
+The configuration is always the same pattern. Point to the `webmcp-client` command:
 
 ```json
 {
-  "command": "webmcp-bridge"
+  "command": "webmcp-client"
 }
 ```
 

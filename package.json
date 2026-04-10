@@ -1,7 +1,7 @@
 {
-  "name": "webmcp-bridge",
-  "version": "2.0.2",
-  "description": "Meta MCP bridge for WebMCP-compliant servers — connect Claude Desktop to any number of WebMCP sites, no restart required",
+  "name": "webmcp-client",
+  "version": "2.0.3",
+  "description": "Meta MCP client for WebMCP-compliant servers \u2014 connect Claude Desktop to any number of WebMCP sites, no restart required",
   "keywords": [
     "mcp",
     "model-context-protocol",
@@ -12,19 +12,20 @@
     "drupal",
     "wordpress",
     "xenforo",
-    "bridge"
+    "client"
   ],
   "author": "chgold",
   "license": "MIT",
-  "homepage": "https://github.com/chgold/webmcp-bridge#readme",
+  "homepage": "https://github.com/chgold/webmcp-client#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chgold/webmcp-bridge.git"
+    "url": "git+https://github.com/chgold/webmcp-client.git"
   },
   "bugs": {
-    "url": "https://github.com/chgold/webmcp-bridge/issues"
+    "url": "https://github.com/chgold/webmcp-client/issues"
   },
   "bin": {
+    "webmcp-client": "./index.js",
     "webmcp-bridge": "./index.js"
   },
   "type": "module",
